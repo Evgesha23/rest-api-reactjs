@@ -19,7 +19,7 @@ class BookList extends Component {
             books : [],
             search : '',
             currentPage : 1,
-            booksPerPage : 5,
+            booksPerPage : 9,
             sortDir: "asc"
         };
     }
@@ -27,15 +27,15 @@ class BookList extends Component {
     sortData = () => {
         setTimeout(() => {
             this.state.sortDir === "asc" ? this.setState({sortDir: "desc"}) : this.setState({sortDir: "asc"});
-            this.findAllBooks(this.state.currentPage);
+            this.findAllTasks(this.state.currentPage);
         }, 500);
     };
 
     componentDidMount() {
-        this.findAllBooks(this.state.currentPage);
+        this.findAllTasks(this.state.currentPage);
     }
 
-    /*findAllBooks() {
+    /*findAllTasks() {
         fetch("http://localhost:8081/rest/books")
             .then(response => response.json())
             .then((data) => {
@@ -43,7 +43,7 @@ class BookList extends Component {
             });
     };*/
 
-    findAllBooks(currentPage) {
+    findAllTasks(currentPage) {
         currentPage -= 1;
         axios.get("http://localhost:8081/rest/books?pageNumber="+currentPage+"&pageSize="+this.state.booksPerPage+"&sortBy=price&sortDir="+this.state.sortDir)
             .then(response => response.data)
@@ -81,7 +81,7 @@ class BookList extends Component {
             if(this.props.bookObject != null) {
                 this.setState({"show":true});
                 setTimeout(() => this.setState({"show":false}), 3000);
-                this.findAllBooks(this.state.currentPage);
+                this.findAllTasks(this.state.currentPage);
             } else {
                 this.setState({"show":false});
             }
@@ -105,7 +105,7 @@ class BookList extends Component {
         if(this.state.search) {
             this.searchData(targetPage);
         } else {
-            this.findAllBooks(targetPage);
+            this.findAllTasks(targetPage);
         }
         this.setState({
             [event.target.name]: targetPage
@@ -118,7 +118,7 @@ class BookList extends Component {
             if(this.state.search) {
                 this.searchData(firstPage);
             } else {
-                this.findAllBooks(firstPage);
+                this.findAllTasks(firstPage);
             }
         }
     };
@@ -129,7 +129,7 @@ class BookList extends Component {
             if(this.state.search) {
                 this.searchData(this.state.currentPage - prevPage);
             } else {
-                this.findAllBooks(this.state.currentPage - prevPage);
+                this.findAllTasks(this.state.currentPage - prevPage);
             }
         }
     };
@@ -140,7 +140,7 @@ class BookList extends Component {
             if(this.state.search) {
                 this.searchData(condition);
             } else {
-                this.findAllBooks(condition);
+                this.findAllTasks(condition);
             }
         }
     };
@@ -150,7 +150,7 @@ class BookList extends Component {
             if(this.state.search) {
                 this.searchData(this.state.currentPage + 1);
             } else {
-                this.findAllBooks(this.state.currentPage + 1);
+                this.findAllTasks(this.state.currentPage + 1);
             }
         }
     };
@@ -163,7 +163,7 @@ class BookList extends Component {
 
     cancelSearch = () => {
         this.setState({"search" : ''});
-        this.findAllBooks(this.state.currentPage);
+        this.findAllTasks(this.state.currentPage);
     };
 
     searchData = (currentPage) => {

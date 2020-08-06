@@ -1,39 +1,57 @@
 import React from 'react';
 import './App.css';
 
-import {Container, Row, Col} from 'react-bootstrap';
+import {Row, Col} from 'react-bootstrap';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 
 import NavigationBar from './components/NavigationBar';
-import Welcome from './components/Welcome';
-import Book from './components/Book/Book';
-import BookList from './components/Book/BookList';
-import UserList from './components/User/UserList';
 import Footer from './components/Footer';
+import StartPage from "./components/StartPage";
+import Autorization from "./components/Autorization";
+import SignUp from "./components/SignUp";
+import MainBaseList from "./components/Book/MainBaseList";
+import MainBaseAdd from "./components/Book/MainBaseAdd";
+import Book from "./components/Book/Book";
+import BookList from "./components/Book/BookList";
 
-export default function App() {
 
-  const heading = "Welcome to Book Store";
-  const quote = "Good friends, good books, and a sleepy conscience: this is the ideal life.";
-  const footer = "Mark Twain";
-
+function App(props) {
   return (
     <Router>
-        <NavigationBar/>
-        <Container>
+        <div className="body" style={{height: "100vh", display: "flex", flexDirection: "column"}}>
+
+            <NavigationBar loggedIn={props.loggedIn}/>
+
+            <div className="content" style={{flex: "1 0 auto", marginBottom: "50px"}}>
             <Row>
                 <Col lg={12} className={"margin-top"}>
                     <Switch>
-                        <Route path="/" exact component={() => <Welcome heading={heading} quote={quote} footer={footer}/>}/>
-                        <Route path="/add" exact component={Book}/>
+                        <Route path="/" exact component={StartPage}/>
                         <Route path="/edit/:id" exact component={Book}/>
-                        <Route path="/list" exact component={BookList}/>
-                        <Route path="/users" exact component={UserList}/>
+                        <Route path="/add" exact component={BookList}/>
+                        <Route path="/edit-task/:id" exact component={MainBaseAdd}/>
+                        <Route path="/add-new-task" exact component={MainBaseAdd}/>
+                        <Route path="/base" exact component={MainBaseList}/>
+                        <Route path="/register" exact component={() => <SignUp loggedIn={props.loggedIn}/>}/>
+                        <Route path="/signIn" exact component={() => <Autorization loggedIn={props.loggedIn}/>}/>
                     </Switch>
                 </Col>
             </Row>
-        </Container>
-        <Footer/>
+            </div>
+
+            <Footer/>
+
+        </div>
     </Router>
   );
 }
+
+const putDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const putStateToProps = (state) => {
+    return {
+        loggedIn: state.loggedIn,
+    }
+};
+export default connect(putStateToProps, putDispatchToProps)(App);
